@@ -1,10 +1,14 @@
 pipeline {
-    agent any
+    agent any 
+    environment {
+        Deploy_To = "Prod"
+    }
     stages {
         stage ("When Stage") {
             when {
-                expression {
-                    BRANCH_NAME ==~ /(production|staging)/
+                anyOf {
+                    environment name: 'Deploy_To', value: 'Prod'
+                    expression { BRANCH_NAME ==~ /(production|staging)/ }
                 }
             }
             steps {
