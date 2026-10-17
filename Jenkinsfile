@@ -7,7 +7,7 @@ pipeline {
         stage ("When Stage") {
             when {
                 anyOf {
-                    environment name: 'Deploy_To', value: 'Prod'
+                    environment name: 'Deploy_To', value: 'Something'
                     expression { BRANCH_NAME ==~ /(production|staging)/ }
                 }
             }
