@@ -1,43 +1,44 @@
- pipeline {
-    agent any
+pipeline {
+    agent {
+        label 'java-agent-slave'
+    }
     stages {
         stage ('Build') {
             steps {
-                echo "Building app"
+                echo "Building App"
             }
         }
-        stage ('Sonar') {
-            steps {
-                echo "code quality"
+        stage ('Scans') {
+            parallel {
+                stage ('Sonar') {
+                    steps {
+                       echo 'Sonar completed'
+                       sleep 10
+                    }
+                }
+                stage ('fortify') {
+                    steps {
+                        echo "fortify completed"
+                        sleep 10
+                    }
+                }
+                stage ('contrast') {
+                    steps {
+                        echo "contrast completed"
+                        sleep 10
+                    }
+                }
             }
         }
-        stage ('DockerImage') {
-            steps {
-                echo "creating docker image"
-            }
-        }
-        stage ('DockerPush') {
-            steps {
-                echo "pushing docker image to docker hub"
-            }
-        }
-        stage ('stage') {
-            when {
-                branch 'release/*'
+        stage ('Prod') {
+            input {
+                message "Ready for deploying to Prod ?"
+                ok "Yes"
+                submitter "manohar"
             }
             steps {
-                echo "Deploying app in stage"
-            }
-        }
-        stage ('production') {
-            when {
-                // Application should only deploy to prod if the app is going through tag
-                //vx.x.x ==> v1.2.3 is the tag version
-                tag pattern: "v\\d{1,2}\\.\\d{1,2}\\.\\d{1,2}\\", comparator: "REGEXP"
-            }
-            steps {
-                echo "Deploying app in production"
+                echo "Deploying to prod"
             }
         }
     }
- }
+}
