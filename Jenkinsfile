@@ -41,4 +41,18 @@ pipeline {
             }
         }
     }
+    post {
+        // This will run if the current pipeline or stage has a success
+        success {
+            echo "Post ===> Success is called"
+        }
+        // This will run if the current pipeline or stage has a success
+        failure {
+            echo "Post ===> failure is called"
+        }
+        // run regardless of completion status of the pipeline or stage
+        always {
+            echo "Post ===> Always is called"
+        }
+    }
 }
