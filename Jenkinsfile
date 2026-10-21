@@ -34,7 +34,7 @@ pipeline {
             input {
                 message "Ready for deploying to Prod ?"
                 ok "Yes"
-                submitter "manohar"
+                submitter "Manohar"
             }
             steps {
                 echo "Deploying to prod"
